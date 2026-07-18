@@ -73,6 +73,21 @@ from app.api.router import api_router
 app.include_router(api_router)
 logger.info("✓ API routes loaded")
 
+# ── Serve the React frontend ──
+from fastapi.responses import FileResponse
+
+STATIC_DIR = settings.get("static_dir", "static")
+
+@app.get("/")
+async def serve_root():
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+
+# Catch-all so client-side routes (e.g. /login, /chat) work on refresh.
+# Must be registered LAST so it doesn't shadow /api or /static routes above.
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+
 logger.info("✨ TheraVox AI ready! Models will load on first use.")
 
 
