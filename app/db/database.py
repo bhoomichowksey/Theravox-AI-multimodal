@@ -15,6 +15,12 @@ def _get_engine():
             "DATABASE_URL is not set. Add it to your .env file.\n"
             "Example: DATABASE_URL=postgresql+asyncpg://user:pass@localhost/theravox"
         )
+    # Render (and most hosts) provide a plain postgresql:// URL. The app
+    # uses the async asyncpg driver, so normalize the scheme accordingly.
+    if database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    elif database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
     return create_async_engine(
         database_url,
         echo=False,           # Set True for SQL debug logging
