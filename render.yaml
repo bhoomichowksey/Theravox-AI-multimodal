@@ -10,10 +10,10 @@ services:
     plan: free                       # spins down after 15 min of idle
     dockerfilePath: ./Dockerfile
     envVars:
-      - key: DATABASE_URL
+      -  key: DATABASE_URL
         fromDatabase:
           name: theravox-db
-          property: connectionURI
+          property: connectionString
       - key: JWT_SECRET_KEY
         generateValue: true          # auto-generates a random secret
       - key: GROQ_API_KEY
