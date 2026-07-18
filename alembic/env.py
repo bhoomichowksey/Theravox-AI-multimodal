@@ -9,6 +9,18 @@ from alembic import context
 # Alembic Config object
 config = context.config
 
+import os
+
+# Override the hardcoded alembic.ini URL with the real runtime DATABASE_URL
+# (e.g. Render's Postgres connection string) so migrations run against the
+# actual production database instead of localhost.
+_database_url = os.getenv("DATABASE_URL")
+if _database_url:
+    if _database_url.startswith("postgresql://"):
+        _database_url = _database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+    elif _database_url.startswith("postgres://"):
+        _database_url = _database_url.replace("postgres://", "postgresql+asyncpg://", 1)
+    config.set_main_option("sqlalchemy.url", _database_url)
 # Set up loggers from the .ini file
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
