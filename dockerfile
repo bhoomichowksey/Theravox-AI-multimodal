@@ -33,7 +33,6 @@ COPY alembic/ ./alembic/
 COPY --from=frontend-build /app/static/ ./static/
 
 # Also copy any existing static assets (index.html, img, etc.)
-COPY static/index.html static/app.js static/styles.css ./static/
 COPY static/img/ ./static/img/
 
 # Create runtime directories
