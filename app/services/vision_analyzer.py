@@ -12,6 +12,11 @@ _np  = None
 _DeepFace = None
 _DEEPFACE_AVAILABLE = None
 
+# Haar cascade classifiers (lightweight fallback, bundled with opencv-python)
+_face_cascade = None
+_smile_cascade = None
+_eye_cascade = None
+
 
 def _get_cv2():
     global _cv2
@@ -39,8 +44,20 @@ def _get_deepface():
         except ImportError:
             _DeepFace = None
             _DEEPFACE_AVAILABLE = False
-            logger.warning("DeepFace not available – vision analysis disabled")
+            logger.warning("DeepFace not available – using lightweight OpenCV fallback for vision analysis")
     return _DeepFace, _DEEPFACE_AVAILABLE
+
+
+def _get_cascades():
+    """Lazy-load Haar cascade classifiers bundled with opencv-python."""
+    global _face_cascade, _smile_cascade, _eye_cascade
+    if _face_cascade is None:
+        cv2 = _get_cv2()
+        base = cv2.data.haarcascades
+        _face_cascade = cv2.CascadeClassifier(base + "haarcascade_frontalface_default.xml")
+        _smile_cascade = cv2.CascadeClassifier(base + "haarcascade_smile.xml")
+        _eye_cascade = cv2.CascadeClassifier(base + "haarcascade_eye.xml")
+    return _face_cascade, _smile_cascade, _eye_cascade
 
 
 # Preferred backends in order. mediapipe is more accurate than opencv for most
@@ -60,6 +77,50 @@ def _run_deepface(frame, backend: str) -> list:
         silent=True,
     )
     return raw if isinstance(raw, list) else [raw]
+
+
+def _run_opencv_fallback(frame) -> List[Dict]:
+    """
+    Lightweight face + expression heuristic using Haar cascades only.
+
+    Much less accurate than DeepFace, but needs no ML model weights, so it
+    works within tight memory limits (e.g. free-tier hosting). Detects a
+    face, then uses smile/eye detection as a rough proxy for emotion:
+      - Smile detected              -> happy
+      - Eyes wide, no smile         -> surprise
+      - Face detected, no signals   -> neutral
+    """
+    cv2 = _get_cv2()
+    face_cascade, smile_cascade, eye_cascade = _get_cascades()
+
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.equalizeHist(gray)
+
+    faces = face_cascade.detectMultiScale(
+        gray, scaleFactor=1.1, minNeighbors=5, minSize=(60, 60)
+    )
+
+    results = []
+    for (x, y, w, h) in faces:
+        roi_gray = gray[y:y + h, x:x + w]
+
+        smiles = smile_cascade.detectMultiScale(
+            roi_gray, scaleFactor=1.7, minNeighbors=22, minSize=(int(w * 0.3), int(h * 0.15))
+        )
+        eyes = eye_cascade.detectMultiScale(
+            roi_gray, scaleFactor=1.1, minNeighbors=8, minSize=(int(w * 0.15), int(h * 0.1))
+        )
+
+        if len(smiles) > 0:
+            emotion, confidence = "happy", 0.60
+        elif len(eyes) >= 2:
+            emotion, confidence = "surprise", 0.35
+        else:
+            emotion, confidence = "neutral", 0.45
+
+        results.append({"emotion": emotion, "confidence": confidence})
+
+    return results
 
 
 class EmotionSmoother:
@@ -98,13 +159,15 @@ class EmotionSmoother:
 
 class VisionAnalyzerService:
     """
-    Vision-based emotion analysis using DeepFace.
+    Vision-based emotion analysis.
 
     Strategy:
-      1. Try mediapipe backend first (more accurate, handles partial/tilted faces).
-      2. Fall back to opencv if mediapipe fails.
-      3. Apply temporal smoothing over a 3-frame window for stability.
-      4. Confidence is derived from DeepFace's own per-emotion scores (0-100 → 0-1).
+      1. If DeepFace is installed: try mediapipe backend first (more accurate,
+         handles partial/tilted faces), fall back to opencv backend.
+      2. If DeepFace is NOT installed (e.g. to save memory on constrained
+         hosting): fall back to a lightweight Haar-cascade heuristic that
+         detects faces and makes a rough smile/eye-based emotion guess.
+      3. Apply temporal smoothing over a short window for stability.
     """
 
     def __init__(self, settings=None):
@@ -146,9 +209,14 @@ class VisionAnalyzerService:
         if frame is None or frame.size == 0:
             return []
 
-        _, available = _get_deepface()
-        if not available:
-            return []
+        _, deepface_available = _get_deepface()
+
+        if not deepface_available:
+            try:
+                return _run_opencv_fallback(frame)
+            except Exception as e:
+                logger.error(f"OpenCV fallback vision analysis failed: {e}")
+                return []
 
         cv2 = _get_cv2()
 
