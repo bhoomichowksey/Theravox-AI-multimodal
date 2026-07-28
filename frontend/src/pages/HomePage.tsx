@@ -96,8 +96,9 @@ const fadeUpItem = {
 
 export default function HomePage() {
   const { isAuthenticated } = useAuth();
-  const brandHover = useHoverStyle<HTMLAnchorElement>(
+ const brandHover = useHoverActiveStyle<HTMLAnchorElement>(
     { background: 'var(--brand-hover, #8A9ABC)' },
+    { background: 'var(--brand-dark, #7B8BAF)' },
     { background: 'var(--brand, #9EACCA)' },
   );
   const outlineHover = useHoverStyle<HTMLAnchorElement>(
