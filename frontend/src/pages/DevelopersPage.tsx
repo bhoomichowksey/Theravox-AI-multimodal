@@ -5,8 +5,6 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  linkedin?: string;
-  github?: string;
 }
 
 const TEAM: TeamMember[] = [
@@ -26,7 +24,7 @@ const TEAM: TeamMember[] = [
     bio: 'Frontend specialist and text emotion analysis expert. Responsible for UI/UX design and text NLP.',
   },
   {
-    name: 'Sucheta Nandi',
+    name: 'Suchita Nandi',
     role: 'QA & Docs',
     bio: 'Quality assurance engineer and technical writer ensuring reliability and comprehensive documentation.',
   },
@@ -96,61 +94,9 @@ export default function DevelopersPage() {
               >
                 {member.role}
               </p>
-              <p style={{ fontSize: '14px', lineHeight: '1.6', marginBottom: '16px' }}>
+              <p style={{ fontSize: '14px', lineHeight: '1.6' }}>
                 {member.bio}
               </p>
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '12px',
-                  justifyContent: 'center',
-                }}
-              >
-                {member.linkedin && (
-                  
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="LinkedIn"
-                    style={{
-                      display: 'inline-flex',
-                      width: '36px',
-                      height: '36px',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: '50%',
-                      backgroundColor: '#f5f2ed',
-                      color: '#d97757',
-                      textDecoration: 'none',
-                      transition: 'all 0.25s',
-                    }}
-                  >
-                    <img src="/static/business.png" alt="LinkedIn" style={{ width: '20px', height: '20px' }} />
-                  </a>
-                )}
-                {member.github && (
-                  
-                    href={member.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="GitHub"
-                    style={{
-                      display: 'inline-flex',
-                      width: '36px',
-                      height: '36px',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: '50%',
-                      backgroundColor: '#f5f2ed',
-                      color: '#d97757',
-                      textDecoration: 'none',
-                      transition: 'all 0.25s',
-                    }}
-                  >
-                    <img src="/static/code.png" alt="GitHub" style={{ width: '20px', height: '20px' }} />
-                  </a>
-                )}
-              </div>
             </motion.article>
           ))}
         </motion.div>
