@@ -42,7 +42,7 @@ export default function Header() {
       }}
     >
       <img
-        src="/logo.png"
+        src="/static/logo.png"
         alt="TheraVox logo"
         style={{ height: '32px', width: '32px', objectFit: 'contain', borderRadius: '6px' }}
         onError={(e) => { e.currentTarget.style.display = 'none'; }}
