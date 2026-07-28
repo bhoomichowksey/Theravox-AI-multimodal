@@ -2,8 +2,7 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
-import { useHoverStyle } from '../hooks/useHoverStyle';
-
+import { useHoverStyle, useHoverActiveStyle } from '../hooks/useHoverStyle';
 const TILT_LIMIT = 8; // Max degrees of rotation
 
 function TiltCard({ children, style }: { children: React.ReactNode, style?: React.CSSProperties }) {
