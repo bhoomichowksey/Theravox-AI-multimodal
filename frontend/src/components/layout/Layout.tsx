@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import FloatingFeedback from './FloatingFeedback';
 import GreetingBanner from './GreetingBanner';
+import { useHoverActiveStyle } from '../hooks/useHoverStyle';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,12 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const isChatPage = location.pathname === '/chat';
+
+  const mindfulHover = useHoverActiveStyle<HTMLAnchorElement>(
+    { background: 'var(--brand-dark)', transform: 'translateY(-2px)', boxShadow: '0 8px 28px rgba(158,172,202,0.55)' },
+    { background: '#64749A', transform: 'translateY(0)', boxShadow: '0 4px 16px rgba(100,116,154,0.6)' },
+    { background: 'var(--brand)', transform: 'none', boxShadow: '0 4px 20px rgba(158,172,202,0.45)' },
+  );
 
   return (
     <div className="layout">
@@ -48,16 +55,7 @@ export default function Layout({ children }: LayoutProps) {
             zIndex: 1000,
             transition: 'background 0.2s, transform 0.2s, box-shadow 0.2s',
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--brand-dark)';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 8px 28px rgba(158,172,202,0.55)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'var(--brand)';
-            e.currentTarget.style.transform = 'none';
-            e.currentTarget.style.boxShadow = '0 4px 20px rgba(158,172,202,0.45)';
-          }}
+          {...mindfulHover}
         >
           <span style={{ fontSize: '18px', lineHeight: 1 }}>💬</span>
           Ask MindfulMind
