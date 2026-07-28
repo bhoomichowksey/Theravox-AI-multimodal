@@ -14,36 +14,26 @@ const TEAM: TeamMember[] = [
     name: 'Arpit Jain',
     role: 'Lead Developer',
     bio: 'Lead developer specializing in computer vision and emotion detection from facial expressions, architecture, and system integration.',
-    linkedin: 'https://linkedin.com/in/arpit-jain',
-    github: 'https://github.com/arpit-jain',
   },
   {
     name: 'Ajit Dixit',
     role: 'Full-stack',
     bio: 'Full-stack engineer responsible for API development, backend optimization, and audio processing.',
-    linkedin: 'https://linkedin.com/in/ajit-dixit',
-    github: 'https://github.com/ajit-dixit',
   },
   {
     name: 'Bhoomi Chowksey',
     role: 'Text & Frontend',
     bio: 'Frontend specialist and text emotion analysis expert. Responsible for UI/UX design and text NLP.',
-    linkedin: 'https://linkedin.com/in/bhoomi-chowksey',
-    github: 'https://github.com/bhoomi-chowksey',
   },
   {
-    name: 'Suchita Nandi',
+    name: 'Sucheta Nandi',
     role: 'QA & Docs',
     bio: 'Quality assurance engineer and technical writer ensuring reliability and comprehensive documentation.',
-    linkedin: 'https://linkedin.com/in/suchita-nandi',
-    github: 'https://github.com/suchita-nandi',
   },
   {
     name: 'Aditi Bathla',
     role: 'UX & Integration',
     bio: 'UX/UI designer and integration specialist coordinating all components into a seamless experience.',
-    linkedin: 'https://linkedin.com/in/aditi-bathla',
-    github: 'https://github.com/aditi-bathla',
   },
 ];
 
@@ -117,7 +107,7 @@ export default function DevelopersPage() {
                 }}
               >
                 {member.linkedin && (
-                  <a
+                  
                     href={member.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -135,11 +125,11 @@ export default function DevelopersPage() {
                       transition: 'all 0.25s',
                     }}
                   >
-                    <img src="/business.png" alt="LinkedIn" style={{ width: '20px', height: '20px' }} />
+                    <img src="/static/business.png" alt="LinkedIn" style={{ width: '20px', height: '20px' }} />
                   </a>
                 )}
                 {member.github && (
-                  <a
+                  
                     href={member.github}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -157,7 +147,7 @@ export default function DevelopersPage() {
                       transition: 'all 0.25s',
                     }}
                   >
-                    <img src="/code.png" alt="GitHub" style={{ width: '20px', height: '20px' }} />
+                    <img src="/static/code.png" alt="GitHub" style={{ width: '20px', height: '20px' }} />
                   </a>
                 )}
               </div>
