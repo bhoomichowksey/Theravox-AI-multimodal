@@ -3,7 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import FloatingFeedback from './FloatingFeedback';
 import GreetingBanner from './GreetingBanner';
-import { useHoverActiveStyle } from '../hooks/useHoverStyle';
+import { useHoverActiveStyle } from '../../hooks/useHoverStyle';
 
 interface LayoutProps {
   children: React.ReactNode;
