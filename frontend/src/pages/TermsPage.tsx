@@ -9,7 +9,7 @@ export default function TermsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-lg font-bold hover:opacity-80 transition-opacity">
             <div className="w-8 h-8 rounded-lg bg-[var(--bg-secondary)] border border-[var(--border)] flex items-center justify-center shadow-sm">
-              <img src="/logo.png" alt="TheraVox logo" className="w-5 h-5 object-contain" />
+              <img src="/static/logo.png" alt="TheraVox logo" className="w-5 h-5 object-contain" />
             </div>
             <span>TheraVox AI</span>
           </Link>
