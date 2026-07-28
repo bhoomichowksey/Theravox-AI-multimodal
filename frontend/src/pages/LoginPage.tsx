@@ -91,7 +91,7 @@ export default function LoginPage() {
                 whileHover={{ rotate: [0, -10, 10, -5, 5, 0], scale: 1.05 }}
                 transition={{ duration: 0.5 }}
               >
-                <img src="/logo.png" alt="TheraVox logo" className="auth-brand__logo" />
+                <img src="/static/logo.png" alt="TheraVox logo" className="auth-brand__logo" />
               </motion.div>
               <span className="auth-brand__text">TheraVox AI</span>
             </Link>
@@ -166,7 +166,7 @@ export default function LoginPage() {
               <motion.div variants={itemVariants} className="auth-card-brand">
                 <Link to="/" className="auth-brand">
                   <div className="auth-brand__icon-wrap">
-                    <img src="/logo.png" alt="TheraVox logo" className="auth-brand__logo" />
+                    <img src="/static/logo.png" alt="TheraVox logo" className="auth-brand__logo" />
                   </div>
                   <span className="auth-brand__text">TheraVox AI</span>
                 </Link>
